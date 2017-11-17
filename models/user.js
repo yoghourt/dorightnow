@@ -32,13 +32,13 @@ module.exports = {
 		pool.getConnection(function(err,connection){
 			if(err) throw err;
 			console.log(username,password);
-			var x = connection.query('SELECT `id` FROM `user` WHERE `username` = ?',[username], function(err, result){
+			var query = connection.query('SELECT `id` FROM `user` WHERE `username` = ?',[username], function(err, result){
 				if(err) throw err;
 				console.log(result);
 				cb(result);
 				connection.release();
 			})
-			console.log(x.sql)
+			console.log(query.sql);
 		})
 	}
 }

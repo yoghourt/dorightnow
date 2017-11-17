@@ -3,7 +3,6 @@ var router = express.Router();
 var user_m = require('../models/user');
 
 router.post('/reg',function(req, res, next){
-	console.log(req.body);
 	var username = req.body.username || '',
 	password = req.body.password || '';
 	
@@ -27,8 +26,6 @@ router.post('/login',function(req, res, next){
 		
 	var password_hash = user_m.hash(password);
 	
-	res.header("Access-Control-Allow-Origin", "*");
-	
 	user_m.login(username,password_hash, function(result){
 		if(result.length){
 			let uid = result[0].id;
@@ -38,6 +35,7 @@ router.post('/login',function(req, res, next){
 				username: username
 			}
 			res.json({status : 0,data : {uid : uid}});
+			console.log(req.session.user);
 		}else{
 			res.json({status : -1});
 		}

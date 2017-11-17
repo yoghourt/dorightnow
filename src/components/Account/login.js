@@ -1,9 +1,9 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { browserHistory , Link } from 'react-router';
 
 import TopBar from '../Public/TopBar';
 import { createForm } from 'rc-form';
-import { List, InputItem, Button } from 'antd-mobile';
+import { Flex , List, InputItem, Button, Toast } from 'antd-mobile';
 
 const Item = List.Item;
 
@@ -16,23 +16,27 @@ class LoginForm extends React.Component{
 	}
 	submit = () => {
 		this.props.form.validateFields((error, value) => {
-			fetch('/user/login',{
-				method: 'POST',
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify(value),
-			}).then(response => {
-				return response.json() 
-			}).then(data => {
-				console.log(data);
-				alert("登录成功");
-				browserHistory.goBack();
-			})
+			if(!error){
+				fetch('/user/login',{
+					method: 'POST',
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(value),
+				}).then(response => {
+					return response.json() 
+				}).then(data => {
+					console.log(data);
+					alert("登录成功");
+					browserHistory.goBack();
+				})
+			}else{
+				
+			}
 		});
 	}
 	render(){
-		const { getFieldProps } = this.props.form;
+		const { getFieldProps , getFieldError } = this.props.form;
 		return(
 			<div>
 				<TopBar title={this.state.title}
@@ -40,13 +44,31 @@ class LoginForm extends React.Component{
 				<form>
 					<List>
 						<InputItem
-							{...getFieldProps('username')}
+							{...getFieldProps('username',{
+								rules: [
+									{ required: true, message: '请输入用户名'}
+								],
+							})}
+							clear
+							error={!!getFieldError('username')}
+							onErrorClick={() => {
+								Toast.info(getFieldError('username').join('、'),1);
+							}}
 							placeholder="请输入用户名"
 						>
 						用户名
 						</InputItem>
 						<InputItem
-							{...getFieldProps('password')}
+							{...getFieldProps('password',{
+								rules: [
+									{ required: true, message: '请输入密码' }
+								]
+							})}
+							clear
+							error={!!getFieldError('password')}
+							onErrorClick={() => {
+								Toast.info(getFieldError('password').join('、'),1);
+							}}
 							type="password"
 							placeholder="请输入密码"
 						>
@@ -55,8 +77,15 @@ class LoginForm extends React.Component{
 						<Item>
 							<Button type="primary" onClick={this.submit}>登录</Button>
 						</Item>
+						<Item>
+							<Flex justify="around">
+						    	<Link to="/account/regsiter">注册</Link>
+						      	<Link to="/account/forgotPwd">忘记密码</Link>
+						    </Flex>
+						</Item>
 					</List>
 				</form>
+				
 			</div>
 		)
 	}

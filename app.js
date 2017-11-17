@@ -10,8 +10,8 @@ var session = require('express-session');
 
 var logger = require('morgan');
 
-var routes = require('./routes/index');
 var users = require('./routes/user');
+var projects = require('./routes/projects');
 
 var http = require('http').Server(app);
 
@@ -24,18 +24,19 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false,limit: '50mb'}));
+app.use(bodyParser.json({limit: '50mb'}));
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use('/img',express.static(path.join(__dirname, 'public/img/*')))
-
-app.use('/', routes);
+app.use('/upload',express.static(path.join(__dirname, 'public/upload/*')))
 app.use('/user', users);
-
-
+app.use('/projects',projects);
 
 app.use(function(req, res, next){
+	
+	res.header("Access-Control-Allow-Origin", "*");
+	
 	if(req.session.user){
 		res.locals.user = {
 			uid : req.session.user.uid,
