@@ -26,9 +26,12 @@ class registerForm extends React.Component{
 				}).then(response => {
 					return response.json() 
 				}).then(data => {
-					console.log(data);
-					Toast.info("注册成功",1);
+					if(data.status === 0){
+						Toast.info("注册成功",1);
 					browserHistory.goBack();
+					}else{
+						Toast.info(data.errmsg,1);	
+					}
 				})
 			}else{
 				//alert('验证失败');

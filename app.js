@@ -24,14 +24,10 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-app.use(bodyParser.urlencoded({extended: false,limit: '50mb'}));
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname,'public')));
-app.use('/img',express.static(path.join(__dirname, 'public/img/*')))
-app.use('/upload',express.static(path.join(__dirname, 'public/upload/*')))
-app.use('/user', users);
-app.use('/projects',projects);
 
 app.use(function(req, res, next){
 	
@@ -47,6 +43,9 @@ app.use(function(req, res, next){
 	}
 	next();
 })
+
+app.use('/user', users);
+app.use('/projects',projects);
 
 http.listen(9999, function(){
 	console.log('listening on *:9999');

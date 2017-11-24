@@ -26,9 +26,15 @@ class LoginForm extends React.Component{
 				}).then(response => {
 					return response.json() 
 				}).then(data => {
-					console.log(data);
-					alert("登录成功");
-					browserHistory.goBack();
+					
+					if(data.status === 0){
+						Toast.info("登录成功",1);
+						this.setState({
+							uid : data.uid
+						})
+						browserHistory.goBack();
+					}
+					
 				})
 			}else{
 				

@@ -12,9 +12,10 @@
 				let image = file.files[0];
 				console.log(image);
 				let formData = new FormData();
-				formData.append('file',image);
+				formData.append('project-poster',image);
 				fetch('http://192.168.1.120:9999/projects/uploadPoster',{
 					method: 'POST',
+					mode: 'no-cors',
 					body: formData
 				}).then(function(response){
 					return response.json();

@@ -11,11 +11,12 @@ router.post('/reg',function(req, res, next){
 	
 	user_m.reg(username,password_hash,regtime, function(result){
 		if(result.isExisted){
-			res.render('reg',{errmsg: '用户名已存在'});
+			res.json({status: -1 , errmsg: '用户名已存在'});
 		}else if(result.affectedRows){
-			res.redirect('/');
+			console.log(result.affectedRows);
+			res.json({status: 0});
 		}else{
-			res.render('reg',{errmsg:'注册失败，请重新尝试'});
+			res.json({status: -1 , errmsg:'注册失败，请重新尝试'});
 		}
 	});
 })
@@ -39,6 +40,14 @@ router.post('/login',function(req, res, next){
 		}else{
 			res.json({status : -1});
 		}
+	})
+})
+
+router.post('/delete',function(req, res, next){
+	var userid = req.body.id || '';
+	
+	user_m.delete(id,function(result){
+		
 	})
 })
 

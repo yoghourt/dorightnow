@@ -29,24 +29,27 @@ class ProjectCreateForm extends React.Component{
 		let self = this;
 		let formData = new FormData();
 		formData.append('project-poster',files[0].file);
-		fetch('/projects/uploadPoster',{
+		return fetch('/projects/uploadPoster',{
 			method: 'POST',
 			body: formData,
 			redirect: "error",
-			origin:"cors"
+			mode:"no-cors"
 		})
 		.then(response => {
+			alert(response);
 			if(response.ok){
 				response.json().then(data => {
-					console.log(data);
-					alert(2);
-					data = JSON.parse(data);
-				return	self.setState({
+				var jsonObj = JSON.parse(data); 
+				alert(jsonObj);
+				alert(jsonObj.posterImg.filename);
+				self.setState({
 						files: [{
 							id: '1',
-							url: "/upload/" + data.posterImg.filename
+							url: "/upload/" + jsonObj.posterImg.filename
 						}]
 					});
+				console.log(self.state);
+				alert(self.state);
 				})
 			}else{
 				alert('Network response was not ok.');
@@ -54,9 +57,7 @@ class ProjectCreateForm extends React.Component{
 		})
 		.catch(function(error){
 			console.log(error);
-		  alert(3);
 		})
-		
 	}
 	submit = () => {
 		this.props.form.validateFields((error, value) => {
@@ -77,6 +78,7 @@ class ProjectCreateForm extends React.Component{
 				})
 			}
 		})
+		return false;
 	}
 	render (){
 		const { getFieldProps } = this.props.form;
@@ -96,6 +98,7 @@ class ProjectCreateForm extends React.Component{
 						<ImagePicker
 							files = {this.state.files}
 							onChange={this.onChange}
+							onImageClick={(index, fs) => console.log(index, fs)}
 							selectable={this.state.files.length < 1}
 						/>
 						<InputItem 

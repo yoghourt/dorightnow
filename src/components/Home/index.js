@@ -45,7 +45,9 @@ class Home extends React.Component{
 			data: []
 		}
 	}
-	
+	nofind = (event) => {
+		event.target.src = "/img/404.png";	
+	}
 	componentDidMount() {
 		
 		
@@ -88,9 +90,11 @@ class Home extends React.Component{
 //								thumb={<img style={{width: "36px", height: "36px",borderRadius: "100%"}} src={obj.Author.thumb}/>}
 								extra={<Link to={`/project/id/${obj.idprojects}`} >{obj.projectname}</Link>}
 							/>
+							<Link to={`/project/id/${obj.idprojects}`} >
 							<Card.Body style={{padding: '0 0 6px'}}>
-								<img style={{display : 'block',width : '100%'}} className="corner-badge" src={obj.postImg}/>
+								<img style={{display : 'block',width : '100%'}} className="corner-badge" src={obj.posterImg} onError={this.nofind}/>
 							</Card.Body>
+							</Link>
 							<Card.Footer 
 								content={obj.projectdes}
 								extra={'123'}

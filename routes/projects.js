@@ -17,7 +17,15 @@ router.get('/list',function(req, res, next){
 	
 	projects_m.list(function(result){
 		res.json(JSON.stringify(result));
-		
+	})
+})
+
+router.post('/detail',function(req,res, next){
+	
+	var id = req.body.id || '';
+	
+	projects_m.detail(id,function(result){
+		res.json(JSON.stringify(result[0]));
 	})
 })
 
@@ -41,7 +49,6 @@ router.post('/create',function(req, res, next){
 router.post('/uploadPoster',upload.fields([{ name: 'project-poster', maxCount: 1 }]),function(req, res, next){
 	
 	res.json(JSON.stringify({status : 0,posterImg : req.files['project-poster'][0]}));
-	
 })
 
 module.exports = router;
